@@ -49,34 +49,10 @@ def hex2base64(number):
     # Loop through the binary number, discarding last part if
     # the length of the binary number is not a multiple of 6.
     for i in range(0,len(binaryNumber), 6):
-        #print(type(int(binaryNumber[i:i+5], 2)))
-        #print(len(binaryNumber))
-        #print(int(binaryNumber[i:i+5], 2))
-        #print(i)
-
         currentBinaryNumber = binaryNumber[i:i+6]
-        #modifiedBinaryNumber = ""
-
-        """
-        # Add leading zeros, since Python automatically removes them.
-        if(len(currentBinaryNumber) < 6):
-            for i in range(6 - len(currentBinaryNumber)):
-                modifiedBinaryNumber = "0" + modifiedBinaryNumber
-            modifiedBinaryNumber = modifiedBinaryNumber + currentBinaryNumber
-            currentBinaryNumber = modifiedBinaryNumber
-        """
-
-        #print(modifiedBinaryNumber)
-        #print(currentBinaryNumber)            
-
-        #print(binary2Base64Dict[int(currentBinaryNumber, 2)])
-        #print(binary2Base64Dict[int(binaryNumber[i:i+5], 2)])
         base64Number = base64Number + binary2Base64Dict[int(currentBinaryNumber, 2)]
-        #print(base64Number)
 
     # Add padding
-
-    #base64number = binaryNumber
 
     return base64Number
 
