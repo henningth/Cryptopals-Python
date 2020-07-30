@@ -44,6 +44,17 @@ def hex2base64(number):
     for i in range(len(base64Alphabet)):
         binary2Base64Dict[i] = base64Alphabet[i]
 
+    # Check if length of input binary string is a multiple of 6
+    paddingLength = 0
+    if len(binaryNumber) % 6 == 4: # Four bits in last sextet
+        binaryNumber = binaryNumber + "00"
+        paddingLength = 1 # Add one "=" as padding the output
+
+    if len(binaryNumber) % 6 == 2: # Two bits in last sextet
+        binaryNumber = binaryNumber + "0000"
+        paddingLength = 2 # Add two "=" as padding the output
+
+
     # Convert binary to Base64 according to the definition
 
     # Loop through the binary number, discarding last part if
@@ -52,7 +63,13 @@ def hex2base64(number):
         currentBinaryNumber = binaryNumber[i:i+6]
         base64Number = base64Number + binary2Base64Dict[int(currentBinaryNumber, 2)]
 
-    # Add padding
+    # Add the padding to the output, either one or two equals signs.
+
+    if paddingLength == 1:
+        base64Number = base64Number + "="
+    
+    if paddingLength == 2:
+        base64Number = base64Number + "=="
 
     return base64Number
 
@@ -65,7 +82,13 @@ knownHexInput = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706
 
 knownBase64Output = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t"
 
-print("Base64 output: ", hex2base64(knownHexInput))
+print("Correct output: ", knownBase64Output)
+print("Base64 output:  ", hex2base64(knownHexInput))
+
+"""
+Test cases, generate some random hexadecimal numbers, convert them to Base64, 
+and compare with b64 module.
+"""
 
 if( hex2base64(knownHexInput) == knownBase64Output ):
     print("Success")
