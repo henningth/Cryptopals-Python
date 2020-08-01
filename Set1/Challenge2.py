@@ -23,6 +23,9 @@ def fixedXOR(hexStr1, hexStr2):
 
     str1xorStr2 = hex(str1xorStr2)[2:] # Remove '0x' part
 
+    if len(str1xorStr2) < len(hexStr1): # Since Python removes leading zeros
+        str1xorStr2 = ("0" * (len(hexStr1) - len(str1xorStr2))) + str1xorStr2
+
     return str1xorStr2
 
 if __name__ == "__main__":
