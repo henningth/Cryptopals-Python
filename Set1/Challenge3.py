@@ -21,7 +21,8 @@ from Challenge2 import fixedXOR
 
 hexEncodedString = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
 
-englishCharacterFrequency = {"a": 8.497,
+def getEnglishCharacterFrequency():
+    englishCharacterFrequency = {"a": 8.497,
                              "b": 1.492,
                              "c": 2.202,
                              "d": 4.253,
@@ -48,10 +49,14 @@ englishCharacterFrequency = {"a": 8.497,
                              "y": 1.994,
                              "z": 0.077}
 
-# Normalize character frequencies
-englishCharacterFrequencyNormalized = {}
-for key in englishCharacterFrequency.keys():
-    englishCharacterFrequencyNormalized[key] = englishCharacterFrequency[key] / 100
+    # Normalize character frequencies
+    englishCharacterFrequencyNormalized = {}
+    for key in englishCharacterFrequency.keys():
+        englishCharacterFrequencyNormalized[key] = englishCharacterFrequency[key] / 100
+
+    return englishCharacterFrequency, englishCharacterFrequencyNormalized
+
+englishCharacterFrequency, englishCharacterFrequencyNormalized = getEnglishCharacterFrequency()
 
 def computeCharacterFrequency(asciiString):
     """
@@ -60,6 +65,7 @@ def computeCharacterFrequency(asciiString):
 
     Taken from: https://en.wikipedia.org/wiki/Letter_frequency
     """
+    englishCharacterFrequency, englishCharacterFrequencyNormalized = getEnglishCharacterFrequency()
 
     englishCharacters = list(englishCharacterFrequency.keys())
 
@@ -71,9 +77,11 @@ def computeCharacterFrequency(asciiString):
 
         for character in asciiString:
 
-            if character.lower() == englishCharacter:
+            if str(character).isalpha():
 
-                asciiStringCharacterFrequency[englishCharacter] += 1
+                if character.lower() == englishCharacter:
+
+                    asciiStringCharacterFrequency[englishCharacter] += 1
 
     asciiStringRelativeCharacterFrequency = asciiStringCharacterFrequency
     for key in asciiStringRelativeCharacterFrequency.keys():
@@ -88,6 +96,7 @@ def compareCharacterFrequencyToEnglish(asciiCharacterFrequency):
     returns distance by computing squared 
     distance between letters
     """
+    englishCharacterFrequency, englishCharacterFrequencyNormalized = getEnglishCharacterFrequency()
 
     squaredDistance = 0
     absDistance = 0
