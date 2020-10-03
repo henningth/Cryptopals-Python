@@ -80,10 +80,10 @@ for asciiCharacterAbsDistance in asciiCharacterAbsDistanceList:
 # Save results (top-10 for each string) in a text file
 strnum = 1
 with open(savefilepath, mode="w") as f:
-    for asciiCharacterSquaredDistanceSorted in asciiCharacterAbsDistanceSortedList:
+    for asciiCharacterAbsDistanceSorted in asciiCharacterAbsDistanceSortedList:
         num = 0
         f.write("\nString: " + str(strnum))
-        for key, value in asciiCharacterSquaredDistanceSorted.items():
+        for key, value in asciiCharacterAbsDistanceSorted.items():
             f.write( str(asciiStrings[strnum-1][key]) + "with distance: " + str(value) + "\n" )
             num += 1
             if num == 5:
