@@ -132,7 +132,7 @@ def decodeHexStringToASCII(hexString):
 
         repeatedBytes[currentByte] = currentByteHex * numBytesInHexEncodedString
 
-        decodedStrings[currentByte] = fixedXOR( repeatedBytes[currentByte], hexEncodedString)
+        decodedStrings[currentByte] = fixedXOR( repeatedBytes[currentByte], hexString)
 
         base64Strings[currentByte] = hex2base64(decodedStrings[currentByte])
 
@@ -140,35 +140,37 @@ def decodeHexStringToASCII(hexString):
 
     return asciiStrings
 
-asciiStrings = decodeHexStringToASCII(hexEncodedString)
+if __name__ == "__main__":
 
-asciiCharacterFrequency = {}
-asciiCharacterSquaredDistance = {}
-asciiCharacterAbsDistance = {}
+    asciiStrings = decodeHexStringToASCII(hexEncodedString)
 
-for key in asciiStrings.keys():
-    asciiCharacterFrequency[key] = computeCharacterFrequency(asciiStrings[key])
-    asciiCharacterSquaredDistance[key], asciiCharacterAbsDistance[key] = compareCharacterFrequencyToEnglish(asciiCharacterFrequency[key])
+    asciiCharacterFrequency = {}
+    asciiCharacterSquaredDistance = {}
+    asciiCharacterAbsDistance = {}
 
-# Sort character frequency of the tables in ascending order
-# (from: https://stackoverflow.com/questions/613183/how-do-i-sort-a-dictionary-by-value)
-asciiCharacterSquaredDistanceSorted = {k: v for k, v in sorted(asciiCharacterSquaredDistance.items(), key=lambda item: item[1])}
-asciiCharacterAbsDistanceSorted = {k: v for k, v in sorted(asciiCharacterAbsDistance.items(), key=lambda item: item[1])}
+    for key in asciiStrings.keys():
+        asciiCharacterFrequency[key] = computeCharacterFrequency(asciiStrings[key])
+        asciiCharacterSquaredDistance[key], asciiCharacterAbsDistance[key] = compareCharacterFrequencyToEnglish(asciiCharacterFrequency[key])
 
-# Print results:
-print("For squared distance, the ten strings with character distribution closest to English are:")
-num = 0
-for key, value in asciiCharacterSquaredDistanceSorted.items():
-    print(asciiStrings[key], "with distance: ", value)
-    num += 1
-    if num == 10:
-        break
+    # Sort character frequency of the tables in ascending order
+    # (from: https://stackoverflow.com/questions/613183/how-do-i-sort-a-dictionary-by-value)
+    asciiCharacterSquaredDistanceSorted = {k: v for k, v in sorted(asciiCharacterSquaredDistance.items(), key=lambda item: item[1])}
+    asciiCharacterAbsDistanceSorted = {k: v for k, v in sorted(asciiCharacterAbsDistance.items(), key=lambda item: item[1])}
 
-print("\n===================================================================================================\n")
-print("For absolute value distance, the ten strings with character distribution closest to English are:")
-num = 0
-for key, value in asciiCharacterAbsDistanceSorted.items():
-    print(asciiStrings[key], "with distance: ", value)
-    num += 1
-    if num == 10:
-        break
+    # Print results:
+    print("For squared distance, the ten strings with character distribution closest to English are:")
+    num = 0
+    for key, value in asciiCharacterSquaredDistanceSorted.items():
+        print(asciiStrings[key], "with distance: ", value)
+        num += 1
+        if num == 10:
+            break
+
+    print("\n===================================================================================================\n")
+    print("For absolute value distance, the ten strings with character distribution closest to English are:")
+    num = 0
+    for key, value in asciiCharacterAbsDistanceSorted.items():
+        print(asciiStrings[key], "with distance: ", value)
+        num += 1
+        if num == 10:
+            break
