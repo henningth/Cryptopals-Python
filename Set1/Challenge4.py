@@ -77,7 +77,7 @@ for asciiCharacterAbsDistance in asciiCharacterAbsDistanceList:
 # each element is a dictionary with 256 key-value pairs. These key-value pairs are sorted: the values are sorted 
 # in ascending order.
 
-# Save results (top-10 for each string) in a text file
+# Save results (top-5 for each string) in a text file
 strnum = 1
 with open(savefilepath, mode="w") as f:
     for asciiCharacterAbsDistanceSorted in asciiCharacterAbsDistanceSortedList:
