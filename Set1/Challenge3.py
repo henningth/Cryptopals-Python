@@ -65,6 +65,9 @@ def computeCharacterFrequency(asciiString):
 
     Taken from: https://en.wikipedia.org/wiki/Letter_frequency
     """
+    numEnglishChar = 0 # Counts number of English characters
+    numNonEnglishChar = 0 # Counts number of non-English characters
+
     englishCharacterFrequency, englishCharacterFrequencyNormalized = getEnglishCharacterFrequency()
 
     englishCharacters = list(englishCharacterFrequency.keys())
@@ -83,9 +86,17 @@ def computeCharacterFrequency(asciiString):
 
                     asciiStringCharacterFrequency[englishCharacter] += 1
 
+                    numEnglishChar += 1
+
+                else:
+
+                    numNonEnglishChar += 1
+
     asciiStringRelativeCharacterFrequency = asciiStringCharacterFrequency
     for key in asciiStringRelativeCharacterFrequency.keys():
-        asciiStringRelativeCharacterFrequency[key] = asciiStringRelativeCharacterFrequency[key] / len(asciiString)
+        if numEnglishChar > 0:
+            #asciiStringRelativeCharacterFrequency[key] = asciiStringRelativeCharacterFrequency[key] / numEnglishChar
+            asciiStringRelativeCharacterFrequency[key] = asciiStringRelativeCharacterFrequency[key] / len(asciiString)
 
     return asciiStringRelativeCharacterFrequency
 
