@@ -73,6 +73,7 @@ if __name__ == "__main__":
     paddedPlaintext = PKCS7padding(plaintext, blocksize)
     print(plaintext)
     print(paddedPlaintext)
+    assert len(paddedPlaintext) % blocksize == 0
 
     # Test 4: Plaintext length equal to blocksize
     plaintext = b'YELLOW SUBMARINE'
@@ -80,3 +81,4 @@ if __name__ == "__main__":
     paddedPlaintext = PKCS7padding(plaintext, blocksize)
     print(plaintext)
     print(paddedPlaintext)
+    assert len(paddedPlaintext) % blocksize == 0
