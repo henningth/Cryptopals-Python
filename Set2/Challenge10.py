@@ -1,10 +1,10 @@
 """
 
-Cryptopals challenge 2 in set 2.
+Cryptopals challenge 10 in set 2.
 
 Implementing CBC mode.
 
-Challenge website: https://cryptopals.com/sets/2/challenges/2
+Challenge website: https://cryptopals.com/sets/2/challenges/10
 
 """
 
@@ -18,7 +18,7 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 
 # Custom imports
-from Challenge1 import PKCS7padding
+from Challenge9 import PKCS7padding
 
 # Functions
 def bitwiseXOR(bytearray1, bytearray2):

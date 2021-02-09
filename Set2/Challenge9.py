@@ -1,10 +1,10 @@
 """
 
-Cryptopals challenge 1 in set 2.
+Cryptopals challenge 9 in set 2.
 
 Implementing PKCS#7 padding.
 
-Challenge website: https://cryptopals.com/sets/2/challenges/1
+Challenge website: https://cryptopals.com/sets/2/challenges/9
 
 """
 
