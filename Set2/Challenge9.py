@@ -78,19 +78,19 @@ def PKCS7unpadder(paddedPlaintext, blocksize):
 
     return plaintext
 
-def testPadding(plaintext, blocksize):
-    """
-    Test function for the PKCS7 padder and unpadder
-    """
-    paddedPlaintext = PKCS7padder(plaintext, blocksize)
-    unpaddedPlaintext = PKCS7unpadder(paddedPlaintext, blocksize)
-    print(plaintext)
-    print(paddedPlaintext)
-    print(unpaddedPlaintext, "\n")
-    assert len(paddedPlaintext) % blocksize == 0
-    assert len(plaintext) == len(unpaddedPlaintext)
-
 if __name__ == "__main__":
+
+    def testPadding(plaintext, blocksize):
+        """
+        Test function for the PKCS7 padder and unpadder
+        """
+        paddedPlaintext = PKCS7padder(plaintext, blocksize)
+        unpaddedPlaintext = PKCS7unpadder(paddedPlaintext, blocksize)
+        print(plaintext)
+        print(paddedPlaintext)
+        print(unpaddedPlaintext, "\n")
+        assert len(paddedPlaintext) % blocksize == 0
+        assert len(plaintext) == len(unpaddedPlaintext)
 
     # Test 1: From the website
     plaintext = b'YELLOW SUBMARINE'
