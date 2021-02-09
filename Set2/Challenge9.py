@@ -8,11 +8,12 @@ Challenge website: https://cryptopals.com/sets/2/challenges/9
 
 """
 
-def PKCS7padding(plaintext, blocksize):
+def PKCS7padder(plaintext, blocksize):
     """
     Implements PKCS#7 padding on input plaintext, 
     returns padded plaintext, taking blocksize
-    into account
+    into account.
+    Assumes plaintext to be shorter than blocksize.
 
     Input:
     plaintext [byte]
@@ -49,36 +50,64 @@ def PKCS7padding(plaintext, blocksize):
 
     return paddedPlaintext
 
+def PKCS7unpadder(paddedPlaintext, blocksize):
+    """
+    Removes padding from padded plaintext
+    Assumes plaintext to be shorter than blocksize.
+
+    Input:
+    paddedPlaintext [byte]
+    blocksize [int]
+
+    Output:
+    plaintext [byte]
+    """
+
+    plaintext = b''
+
+    for paddingLength in range(1,blocksize+1): # Loop over valid padding lengths
+        padding = paddingLength.to_bytes(1,'little')*paddingLength
+        if padding == paddedPlaintext[blocksize-paddingLength:]:
+            # Remove the padding from the plaintext
+            plaintext = paddedPlaintext[0:blocksize-paddingLength]
+            break
+        if paddingLength == blocksize:
+            # Remove entire last block
+            plaintext = paddedPlaintext[0:blocksize]
+            break
+
+    return plaintext
+
+def testPadding(plaintext, blocksize):
+    """
+    Test function for the PKCS7 padder and unpadder
+    """
+    paddedPlaintext = PKCS7padder(plaintext, blocksize)
+    unpaddedPlaintext = PKCS7unpadder(paddedPlaintext, blocksize)
+    print(plaintext)
+    print(paddedPlaintext)
+    print(unpaddedPlaintext, "\n")
+    assert len(paddedPlaintext) % blocksize == 0
+    assert len(plaintext) == len(unpaddedPlaintext)
+
 if __name__ == "__main__":
 
     # Test 1: From the website
     plaintext = b'YELLOW SUBMARINE'
     blocksize = 20
-    paddedPlaintext = PKCS7padding(plaintext, blocksize)
-    print(plaintext)
-    print(paddedPlaintext)
-    assert len(paddedPlaintext) % blocksize == 0
+    testPadding(plaintext, blocksize)
 
     # Test 2: Standard padding
     plaintext = b'SEGA GENESIS'
     blocksize = 16
-    paddedPlaintext = PKCS7padding(plaintext, blocksize)
-    print(plaintext)
-    print(paddedPlaintext)
-    assert len(paddedPlaintext) % blocksize == 0
+    testPadding(plaintext, blocksize)
 
     # Test 3: Standard padding
     plaintext = b'NINTENDO'
     blocksize = 16
-    paddedPlaintext = PKCS7padding(plaintext, blocksize)
-    print(plaintext)
-    print(paddedPlaintext)
-    assert len(paddedPlaintext) % blocksize == 0
+    testPadding(plaintext, blocksize)
 
     # Test 4: Plaintext length equal to blocksize
     plaintext = b'YELLOW SUBMARINE'
     blocksize = 16
-    paddedPlaintext = PKCS7padding(plaintext, blocksize)
-    print(plaintext)
-    print(paddedPlaintext)
-    assert len(paddedPlaintext) % blocksize == 0
+    testPadding(plaintext, blocksize)
