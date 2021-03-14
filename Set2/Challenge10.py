@@ -29,7 +29,7 @@ def bitwiseXOR(bytearray1, bytearray2):
     result = result.to_bytes(len(bytearray1), 'little')
     return result
 
-def ECBEncrypt(plaintext, key):
+def ECBEncryptSingleBlock(plaintext, key):
     """
     Encrypts a plaintext using the key 
     key in AES-ECB mode. Only intended 
@@ -44,7 +44,7 @@ def ECBEncrypt(plaintext, key):
 
     return ciphertext
 
-def ECBDecrypt(ciphertext, key):
+def ECBDecryptSingleBlock(ciphertext, key):
     """
     Decrypts a ciphertext using the key 
     key in AES-ECB mode. Only intended 
@@ -58,6 +58,63 @@ def ECBDecrypt(ciphertext, key):
     decryptedPlaintext = decryptor.update(ciphertext) + decryptor.finalize()
 
     return decryptedPlaintext
+
+def ECBEncrypt(plaintext, key):
+    """
+    Encrypts a plaintext in Electronic Code Book (ECB)
+    mode using the key key.
+    Calls the ECBEncryptSingleBlock() function for each 
+    16 byte block in the plaintext
+    """
+
+    blocksize = len(key)
+
+    # This will hold all blocks in the ciphertext
+    ciphertext = bytearray()
+
+    # Loop over the 16 byte blocks in the plaintext
+    for i in range(0, len(plaintext), blocksize):
+
+        plaintextBlock = plaintext[i:i+blocksize]
+
+        # For the last block, pad it using PKCS7
+        if len(plaintextBlock) < blocksize:
+            plaintextBlock = PKCS7padder(plaintextBlock, blocksize)
+
+        # Encrypt the block using AES and append to ciphertext
+        ciphertextBlock = ECBEncryptSingleBlock(plaintextBlock, key)
+        ciphertext += ciphertextBlock
+
+    return bytes(ciphertext)
+
+def ECBDecrypt(ciphertext, key):
+    """
+    Decrypts a ciphertext in Electronic Code Book (ECB)
+    mode using the key key.
+    Calls the ECBDecryptSingleBlock() function for each 
+    16 byte block in the plaintext
+    """
+
+    blocksize = len(key)
+
+    # This will hold all blocks in the plaintext
+    plaintext = bytearray()
+
+    # Loop over the 16 byte blocks in the ciphertext
+    for i in range(0, len(ciphertext), blocksize):
+
+        ciphertextBlock = ciphertext[i:i+blocksize]
+
+        # Decrypt the block using AES and append to ciphertext
+        plaintextBlock = ECBDecryptSingleBlock(ciphertextBlock, key)
+
+        # For the last block, unpad it using PKCS7
+        if len(plaintextBlock) < blocksize:
+            plaintextBlock = PKCS7unpadder(plaintextBlock, blocksize)
+
+        plaintext += plaintextBlock
+
+    return bytes(plaintext)
 
 def CBCEncrypt(plaintext, key, iv):
     """
@@ -90,13 +147,13 @@ def CBCEncrypt(plaintext, key, iv):
         plaintextBlockXORpreviousBlock = bitwiseXOR(previousBlock, plaintextBlock)
 
         # Encrypt the block using AES and append to ciphertext
-        ciphertextBlock = ECBEncrypt(plaintextBlockXORpreviousBlock, key)
+        ciphertextBlock = ECBEncryptSingleBlock(plaintextBlockXORpreviousBlock, key)
         ciphertext += ciphertextBlock
 
         # Update the previous block
         previousBlock = ciphertextBlock
 
-    return bytes(ciphertext)        
+    return bytes(ciphertext)
 
 def CBCDecrypt(ciphertext, key, iv):
     """
@@ -121,7 +178,7 @@ def CBCDecrypt(ciphertext, key, iv):
             previousBlock = iv
         
         # Decrypt the ciphertext
-        plaintextBlock = ECBDecrypt(ciphertextBlock, key)
+        plaintextBlock = ECBDecryptSingleBlock(ciphertextBlock, key)
 
         # XOR the plaintext block and previous ciphertext (or iv in case it's the first one)
         plaintextBlockXORpreviousBlock = bitwiseXOR(plaintextBlock, previousBlock)
